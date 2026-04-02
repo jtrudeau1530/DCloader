@@ -1,0 +1,73 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>dc_loader</AssemblyName>
+    <RootNamespace>DCLoader</RootNamespace>
+    <Version>0.1.0</Version>
+    <Nullable>disable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <NoWarn>NU1701;NU1603</NoWarn>
+    <GAME_ROOT>$(HOME)/.local/share/Steam/steamapps/common/Data Center</GAME_ROOT>
+    <!-- Interop DLLs now in loader/interop/ not BepInEx/interop/ -->
+    <INTEROP_DIR>$(MSBuildProjectDirectory)/../../loader/interop</INTEROP_DIR>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Standalone NuGet packages — NO BepInEx.Unity.IL2CPP -->
+    <PackageReference Include="Il2CppInterop.Runtime" Version="1.5.1" />
+    <PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.5.1" />
+    <PackageReference Include="HarmonyX" Version="2.16.0" />
+    <PackageReference Include="Tomlyn" Version="2.3.0" />
+  </ItemGroup>
+
+  <!-- Generated interop assemblies from loader/interop/ — not BepInEx/interop/ -->
+  <ItemGroup>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>$(INTEROP_DIR)/Il2Cppmscorlib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(INTEROP_DIR)/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(INTEROP_DIR)/Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(INTEROP_DIR)/UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(INTEROP_DIR)/Unity.TextMeshPro.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>$(INTEROP_DIR)/UnityEngine.InputModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>$(INTEROP_DIR)/Unity.InputSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(INTEROP_DIR)/UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(INTEROP_DIR)/UnityEngine.UIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Post-build: copy to loader/ folder instead of BepInEx/plugins/ -->
+  <Target Name="DeployLoader" AfterTargets="Build">
+    <Copy
+      SourceFiles="$(OutputPath)$(AssemblyName).dll"
+      DestinationFolder="$(GAME_ROOT)/loader/"
+      SkipUnchangedFiles="true"
+    />
+    <Message Text="Deployed $(AssemblyName).dll to loader/" Importance="high" />
+  </Target>
+</Project>

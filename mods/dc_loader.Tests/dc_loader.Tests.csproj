@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.5.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+  </ItemGroup>
+
+  <!-- Compile only the infrastructure files that have no Unity/BepInEx dependencies -->
+  <ItemGroup>
+    <Compile Include="../dc_loader/DcPaths.cs" />
+    <Compile Include="../dc_loader/Core/DcLogger.cs" />
+    <Compile Include="../dc_loader/Config/ConfigEntry.cs" />
+    <Compile Include="../dc_loader/Config/ConfigFile.cs" />
+    <Compile Include="../dc_loader/Config/ConfigWatcher.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,79 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>dc_cheater</AssemblyName>
+    <RootNamespace>DCCheater</RootNamespace>
+    <Nullable>disable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <NoWarn>NU1701;NU1603</NoWarn>
+    <GAME_ROOT>$(HOME)/.local/share/Steam/steamapps/common/Data Center</GAME_ROOT>
+    <!-- Same interop dir as dc_loader — both reference loader/interop/ -->
+    <INTEROP_DIR>$(MSBuildProjectDirectory)/../../loader/interop</INTEROP_DIR>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Standalone NuGet packages — same versions as dc_loader -->
+    <PackageReference Include="Il2CppInterop.Runtime" Version="1.5.1" />
+    <PackageReference Include="HarmonyX" Version="2.16.0" />
+    <!-- Do NOT add Tomlyn — dc_cheater uses Config.Bind via dc_loader API -->
+  </ItemGroup>
+
+  <!-- Reference dc_loader.dll — not bundled (Private=false) -->
+  <ItemGroup>
+    <Reference Include="dc_loader">
+      <HintPath>$(MSBuildProjectDirectory)/../dc_loader/bin/Debug/net8.0/dc_loader.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Generated interop assemblies from loader/interop/ — all Private=false (not bundled) -->
+  <ItemGroup>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>$(INTEROP_DIR)/Il2Cppmscorlib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(INTEROP_DIR)/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(INTEROP_DIR)/Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(INTEROP_DIR)/UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(INTEROP_DIR)/Unity.TextMeshPro.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>$(INTEROP_DIR)/UnityEngine.InputModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>$(INTEROP_DIR)/Unity.InputSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(INTEROP_DIR)/UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(INTEROP_DIR)/UnityEngine.UIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Post-build: copy to Mods/ — dc_loader discovers mods here -->
+  <Target Name="DeployMod" AfterTargets="Build">
+    <Copy
+      SourceFiles="$(OutputPath)$(AssemblyName).dll"
+      DestinationFolder="$(GAME_ROOT)/Mods/"
+      SkipUnchangedFiles="true"
+    />
+    <Message Text="Deployed $(AssemblyName).dll to Mods/" Importance="high" />
+  </Target>
+</Project>

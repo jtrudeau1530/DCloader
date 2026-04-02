@@ -1,0 +1,22 @@
+# .NET build output
+bin/
+obj/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# BepInEx runtime
+BepInEx/
+
+# User-specific build overrides
+Directory.Build.props.user
+
+# Asset ripper output (large, not source)
+AssetRipper/

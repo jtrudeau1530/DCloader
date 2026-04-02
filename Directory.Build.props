@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Default game path for Linux dev machine. Override in Directory.Build.props.user (gitignored) for other machines. -->
+    <GAME_ROOT Condition="'$(GAME_ROOT)' == ''">/home/jason/.local/share/Steam/steamapps/common/Data Center</GAME_ROOT>
+  </PropertyGroup>
+</Project>
